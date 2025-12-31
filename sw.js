@@ -1,5 +1,9 @@
 self.addEventListener('install', (event) => {
-    self.skipWaiting();
+    self.skipWaiting(); // Force the SW to become active immediately
+});
+
+self.addEventListener('activate', (event) => {
+    event.waitUntil(clients.claim()); // Take control of all open tabs immediately
 });
 
 self.addEventListener('message', (event) => {
@@ -7,11 +11,11 @@ self.addEventListener('message', (event) => {
         const delay = event.data.targetTime - Date.now();
         if (delay > 0) {
             setTimeout(() => {
-                self.registration.showNotification("WELCOME TO 2026", {
-                    body: `Happy New Year, ${event.data.name}! Open to see your greeting.`,
+                self.registration.showNotification("2026 BROADCAST", {
+                    body: `Happy New Year, ${event.data.name}! The future has arrived.`,
                     icon: 'https://cdn-icons-png.flaticon.com/512/3361/3361905.png',
                     vibrate: [500, 100, 500],
-                    tag: 'ny-2026-alert'
+                    badge: 'https://cdn-icons-png.flaticon.com/512/3361/3361905.png'
                 });
             }, delay);
         }
