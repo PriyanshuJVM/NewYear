@@ -175,78 +175,88 @@
     <script>
         //const targetDate = new Date("January 1, 2026 00:00:00").getTime();
         const targetDate = new Date().getTime() + 15000; // 15 seconds from now for testing
-        let userName = "";
+        const targetDate = new Date("January 1, 2026 00:00:00").getTime();
+let userName = "";
 
-        // Register Background Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(reg => {
-                console.log("Broadcast Worker Registered");
-            }).catch(err => console.log("SW Error: Use HTTPS to enable Broadcast"));
-        }
+// 1. Register Service Worker immediately on load
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log("Broadcast Worker Active"))
+            .catch(err => console.error("SW Registration Failed: ", err));
+    });
+}
 
-        window.onload = () => {
-            const savedName = localStorage.getItem('ny2026_user');
-            if (savedName) {
-                userName = savedName;
-                document.getElementById('display-name').innerText = userName.toUpperCase();
-                document.getElementById('name-overlay').style.display = 'none';
-                initTimer();
+async function startExperience() {
+    const nameInput = document.getElementById('user-name');
+    userName = nameInput.value.trim() || "EXPLORER";
+    localStorage.setItem('ny2026_user', userName);
+    document.getElementById('display-name').innerText = userName.toUpperCase();
+
+    // 2. TRIGGER PERMISSION ON CLICK (Required by Phones)
+    if ("Notification" in window) {
+        try {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                console.log("Permission Granted");
+                sendBroadcastToWorker();
+            } else {
+                alert("Please enable notifications in your browser settings for the Broadcast to work.");
             }
-        };
+        } catch (error) {
+            console.error("Notification error:", error);
+        }
+    } else {
+        alert("This browser does not support Broadcast Notifications.");
+    }
 
-        async function startExperience() {
-            userName = document.getElementById('user-name').value.trim() || "GUEST";
-            localStorage.setItem('ny2026_user', userName);
-            document.getElementById('display-name').innerText = userName.toUpperCase();
+    // 3. UI Transition
+    gsap.to("#name-overlay", { opacity: 0, duration: 0.8, onComplete: () => {
+        document.getElementById('name-overlay').style.display = 'none';
+        initTimer();
+    }});
+}
 
-            // Request Notification Access for Background Broadcast
-            if ("Notification" in window) {
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted' && navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.controller.postMessage({
-                        type: 'SCHEDULE_NY_ALERT',
-                        targetTime: targetDate,
-                        name: userName
-                    });
-                }
-            }
+function sendBroadcastToWorker() {
+    // We check for the controller to ensure the Service Worker is actually running
+    if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+            type: 'SCHEDULE_NY_ALERT',
+            targetTime: targetDate,
+            name: userName
+        });
+    } else {
+        // If no controller, reload once to take control (common SW edge case)
+        console.warn("SW not controlling page yet. Broadcast might skip.");
+    }
+}
 
-            gsap.to("#name-overlay", { opacity: 0, duration: 0.8, onComplete: () => {
-                document.getElementById('name-overlay').style.display = 'none';
-                initTimer();
-            }});
+function initTimer() {
+    const timerInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+            clearInterval(timerInterval);
+            triggerMidnight();
+            return;
         }
 
-        function initTimer() {
-            const timerInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const diff = targetDate - now;
+        document.getElementById('d').innerText = Math.floor(diff / 86400000).toString().padStart(2, '0');
+        document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
+        document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+        document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
 
-                if (diff <= 0) {
-                    clearInterval(timerInterval);
-                    triggerMidnight();
-                    return;
-                }
+        if (diff < 10000) document.getElementById('timer-ui').classList.add('shaking');
+    }, 1000);
+}
 
-                document.getElementById('d').innerText = Math.floor(diff / 86400000).toString().padStart(2, '0');
-                document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
-                document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-                document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-
-                if (diff < 10000) document.getElementById('timer-ui').classList.add('shaking');
-            }, 1000);
-        }
-
-        function triggerMidnight() {
-            if (navigator.vibrate) navigator.vibrate([500, 100, 500]);
-            
-            confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-
-            const tl = gsap.timeline();
-            tl.to("#timer-ui", { opacity: 0, scale: 0.8, duration: 1 })
-              .to(window, { scrollTo: "#personal-section", duration: 2, ease: "power4.inOut" })
-              .to("#final-msg", { opacity: 1, duration: 1.5, ease: "back.out" });
-        }
+function triggerMidnight() {
+    if (navigator.vibrate) navigator.vibrate([500, 100, 500]);
+    confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+    gsap.to(window, { scrollTo: "#personal-section", duration: 2, ease: "power4.inOut" });
+    gsap.to("#final-msg", { opacity: 1, duration: 1.5 });
+}
     </script>
 </body>
 </html>
