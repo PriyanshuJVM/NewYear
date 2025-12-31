@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 | The Midnight Broadcast</title>
+    <title>2026 | Holographic Broadcast</title>
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
     
@@ -20,129 +20,57 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background: var(--bg); 
-            color: var(--white); 
-            font-family: 'Space Grotesk', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        body { background: var(--bg); color: var(--white); font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
 
-        /* Stage 1: The Intake Overlay */
+        /* Stage 1: Overlay */
         #name-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            position: fixed; inset: 0; background: var(--bg); z-index: 1000;
+            display: flex; justify-content: center; align-items: center; padding: 20px;
         }
 
         .input-card {
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            padding: 50px 30px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            border-radius: 40px;
-            border: 1px solid rgba(255,255,255,0.1);
+            width: 100%; max-width: 450px; text-align: center; padding: 50px 30px;
+            background: var(--glass); backdrop-filter: blur(20px);
+            border-radius: 40px; border: 1px solid rgba(255,255,255,0.1);
         }
 
         input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid var(--accent);
-            color: white;
-            font-size: clamp(1.2rem, 5vw, 1.8rem);
-            text-align: center;
-            outline: none;
-            margin: 40px 0;
+            width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--accent);
+            color: white; font-size: 1.8rem; text-align: center; outline: none; margin: 40px 0;
         }
 
-        /* Stage 2: The Countdown Section */
-        section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        /* Stage 2: Holographic Clock */
+        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        
+        .countdown-grid { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        
+        .clock-unit { position: relative; width: 140px; height: 140px; display: flex; justify-content: center; align-items: center; }
+        
+        .progress-ring { position: absolute; transform: rotate(-90deg); }
+        .ring-bg { fill: none; stroke: rgba(255, 255, 255, 0.05); stroke-width: 4; }
+        .ring-active { 
+            fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round;
+            stroke-dasharray: 339.292; stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+            filter: drop-shadow(0 0 8px var(--accent));
         }
 
-        .countdown-wrap {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            width: 100%;
-            max-width: 700px;
-        }
+        .time-data { text-align: center; z-index: 2; }
+        .num { font-size: 2.2rem; font-weight: 700; line-height: 1; display: block; }
+        small { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5; }
 
-        @media (min-width: 768px) {
-            .countdown-wrap { grid-template-columns: repeat(4, 1fr); }
-        }
+        /* Stage 3: Reveal */
+        #personal-section { background: radial-gradient(circle, #0a1f21 0%, #050505 100%); }
+        .reveal-text { font-family: 'Syncopate', sans-serif; font-size: clamp(1.8rem, 6vw, 5rem); text-align: center; opacity: 0; }
+        .name-highlight { color: var(--accent); text-shadow: 0 0 30px var(--accent); display: block; }
 
-        .unit {
-            background: var(--glass);
-            padding: 2rem 1rem;
-            border-radius: 25px;
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-        }
-
-        .num { 
-            font-size: clamp(2.5rem, 8vw, 4.5rem); 
-            font-weight: 700; 
-            color: var(--accent); 
-            display: block;
-            line-height: 1;
-        }
-
-        small { font-size: 0.7rem; letter-spacing: 3px; opacity: 0.4; }
-
-        /* Stage 3: The Reveal Section */
-        #personal-section {
-            background: radial-gradient(circle at center, #0a1f21 0%, #050505 100%);
-        }
-
-        .reveal-text {
-            font-family: 'Syncopate', sans-serif;
-            font-size: clamp(1.8rem, 6vw, 5rem);
-            text-transform: uppercase;
-            text-align: center;
-            opacity: 0;
-            line-height: 1.2;
-        }
-
-        .name-highlight {
-            color: var(--accent);
-            text-shadow: 0 0 30px var(--accent);
-            display: block;
-        }
-
-        /* UI Utilities */
-        .btn-init {
-            background: var(--accent);
-            color: black;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
+        .btn-main {
+            background: var(--accent); color: black; border: none; padding: 15px 40px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; text-transform: uppercase;
         }
 
         .shaking { animation: shake 0.1s infinite; }
-        @keyframes shake {
-            0% { transform: translate(0,0); }
-            50% { transform: translate(3px, 3px); }
-            100% { transform: translate(0,0); }
-        }
+        @keyframes shake { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(3px, 3px); } }
     </style>
 </head>
 <body>
@@ -150,113 +78,118 @@
     <div id="name-overlay">
         <div class="input-card">
             <h2>NEW YEAR 2026</h2>
-            <p style="opacity:0.5; font-size:0.8rem; margin-top:10px;">ENABLE BROADCAST SYNC</p>
-            <input type="text" id="user-name" placeholder="YOUR NAME" maxlength="15">
-            <button class="btn-init" onclick="startExperience()">Initialize</button>
+            <input type="text" id="user-name" placeholder="YOUR NAME" maxlength="12">
+            <button class="btn-main" onclick="startExperience()">Connect & Sync</button>
         </div>
     </div>
 
     <section id="timer-section">
-        <div class="countdown-wrap" id="timer-ui">
-            <div class="unit"><span class="num" id="d">00</span><small>Days</small></div>
-            <div class="unit"><span class="num" id="h">00</span><small>Hrs</small></div>
-            <div class="unit"><span class="num" id="m">00</span><small>Mins</small></div>
-            <div class="unit"><span class="num" id="s">00</span><small>Secs</small></div>
+        <div class="countdown-grid" id="timer-ui">
+            <div class="clock-unit">
+                <svg width="120" height="120" class="progress-ring"><circle class="ring-bg" cx="60" cy="60" r="54"/><circle id="ring-d" class="ring-active" cx="60" cy="60" r="54"/></svg>
+                <div class="time-data"><span class="num" id="d">00</span><small>Days</small></div>
+            </div>
+            <div class="clock-unit">
+                <svg width="120" height="120" class="progress-ring"><circle class="ring-bg" cx="60" cy="60" r="54"/><circle id="ring-h" class="ring-active" cx="60" cy="60" r="54"/></svg>
+                <div class="time-data"><span class="num" id="h">00</span><small>Hrs</small></div>
+            </div>
+            <div class="clock-unit">
+                <svg width="120" height="120" class="progress-ring"><circle class="ring-bg" cx="60" cy="60" r="54"/><circle id="ring-m" class="ring-active" cx="60" cy="60" r="54"/></svg>
+                <div class="time-data"><span class="num" id="m">00</span><small>Min</small></div>
+            </div>
+            <div class="clock-unit">
+                <svg width="120" height="120" class="progress-ring"><circle class="ring-bg" cx="60" cy="60" r="54"/><circle id="ring-s" class="ring-active" cx="60" cy="60" r="54"/></svg>
+                <div class="time-data"><span class="num" id="s">00</span><small>Sec</small></div>
+            </div>
         </div>
     </section>
 
     <section id="personal-section">
-        <div class="reveal-text" id="final-msg">
-            HAPPY NEW YEAR<br>
-            <span class="name-highlight" id="display-name">DEVELOPER</span>
-        </div>
+        <div class="reveal-text" id="final-msg">HAPPY NEW YEAR<br><span class="name-highlight" id="display-name">USER</span></div>
     </section>
 
     <script>
-        //const targetDate = new Date("January 1, 2026 00:00:00").getTime();
-        const targetDate = new Date().getTime() + 15000; // 15 seconds from now for testing
         const targetDate = new Date("January 1, 2026 00:00:00").getTime();
-let userName = "";
+        let userName = "";
 
-// 1. Register Service Worker immediately on load
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log("Broadcast Worker Active"))
-            .catch(err => console.error("SW Registration Failed: ", err));
-    });
-}
+        // 1. SW Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                console.log("SW Registered");
+                // Ensure SW takes control immediately
+                if (reg.active) reg.update();
+            });
+        }
 
-async function startExperience() {
-    const nameInput = document.getElementById('user-name');
-    userName = nameInput.value.trim() || "EXPLORER";
-    localStorage.setItem('ny2026_user', userName);
-    document.getElementById('display-name').innerText = userName.toUpperCase();
-
-    // 2. TRIGGER PERMISSION ON CLICK (Required by Phones)
-    if ("Notification" in window) {
-        try {
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-                console.log("Permission Granted");
-                sendBroadcastToWorker();
-            } else {
-                alert("Please enable notifications in your browser settings for the Broadcast to work.");
+        window.onload = () => {
+            const saved = localStorage.getItem('ny2026_user');
+            if (saved) {
+                userName = saved;
+                document.getElementById('display-name').innerText = userName.toUpperCase();
+                document.getElementById('name-overlay').style.display = 'none';
+                initTimer();
             }
-        } catch (error) {
-            console.error("Notification error:", error);
-        }
-    } else {
-        alert("This browser does not support Broadcast Notifications.");
-    }
+        };
 
-    // 3. UI Transition
-    gsap.to("#name-overlay", { opacity: 0, duration: 0.8, onComplete: () => {
-        document.getElementById('name-overlay').style.display = 'none';
-        initTimer();
-    }});
-}
+        async function startExperience() {
+            userName = document.getElementById('user-name').value.trim() || "EXPLORER";
+            localStorage.setItem('ny2026_user', userName);
+            document.getElementById('display-name').innerText = userName.toUpperCase();
 
-function sendBroadcastToWorker() {
-    // We check for the controller to ensure the Service Worker is actually running
-    if (navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
-            type: 'SCHEDULE_NY_ALERT',
-            targetTime: targetDate,
-            name: userName
-        });
-    } else {
-        // If no controller, reload once to take control (common SW edge case)
-        console.warn("SW not controlling page yet. Broadcast might skip.");
-    }
-}
+            // 2. Request Permission inside the Click Event
+            if ("Notification" in window) {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted' && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({
+                        type: 'SCHEDULE_NY_ALERT',
+                        time: targetDate,
+                        name: userName
+                    });
+                }
+            }
 
-function initTimer() {
-    const timerInterval = setInterval(() => {
-        const now = new Date().getTime();
-        const diff = targetDate - now;
-
-        if (diff <= 0) {
-            clearInterval(timerInterval);
-            triggerMidnight();
-            return;
+            gsap.to("#name-overlay", { opacity: 0, duration: 0.8, onComplete: () => {
+                document.getElementById('name-overlay').style.display = 'none';
+                initTimer();
+            }});
         }
 
-        document.getElementById('d').innerText = Math.floor(diff / 86400000).toString().padStart(2, '0');
-        document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
-        document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-        document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+        function setProgress(id, percent) {
+            const circle = document.getElementById(id);
+            const circumference = 339.292; // $2 \cdot \pi \cdot 54$
+            circle.style.strokeDashoffset = circumference - (percent / 100) * circumference;
+        }
 
-        if (diff < 10000) document.getElementById('timer-ui').classList.add('shaking');
-    }, 1000);
-}
+        function initTimer() {
+            setInterval(() => {
+                const now = new Date().getTime();
+                const diff = targetDate - now;
+                if (diff <= 0) { triggerMidnight(); return; }
+                
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
 
-function triggerMidnight() {
-    if (navigator.vibrate) navigator.vibrate([500, 100, 500]);
-    confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-    gsap.to(window, { scrollTo: "#personal-section", duration: 2, ease: "power4.inOut" });
-    gsap.to("#final-msg", { opacity: 1, duration: 1.5 });
-}
+                document.getElementById('d').innerText = d.toString().padStart(2, '0');
+                document.getElementById('h').innerText = h.toString().padStart(2, '0');
+                document.getElementById('m').innerText = m.toString().padStart(2, '0');
+                document.getElementById('s').innerText = s.toString().padStart(2, '0');
+
+                setProgress('ring-d', (d / 365) * 100);
+                setProgress('ring-h', (h / 24) * 100);
+                setProgress('ring-m', (m / 60) * 100);
+                setProgress('ring-s', (s / 60) * 100);
+
+                if (diff < 10000) document.getElementById('timer-ui').classList.add('shaking');
+            }, 1000);
+        }
+
+        function triggerMidnight() {
+            confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+            gsap.to(window, { scrollTo: "#personal-section", duration: 2, ease: "power4.inOut" });
+            gsap.to("#final-msg", { opacity: 1, duration: 2, delay: 1 });
+        }
     </script>
 </body>
 </html>
