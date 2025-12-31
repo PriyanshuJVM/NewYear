@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 | New Year Reveal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2026 | Digital Broadcast</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -18,7 +18,7 @@
             --glass: rgba(255, 255, 255, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
             background: var(--bg); 
@@ -42,26 +42,30 @@
 
         .input-card {
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             text-align: center;
-            padding: 40px 20px;
+            padding: 40px 25px;
             border: 1px solid rgba(255,255,255,0.1);
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
+            backdrop-filter: blur(25px);
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         input {
-            width: 80%;
+            width: 90%;
             background: transparent;
             border: none;
             border-bottom: 2px solid var(--accent);
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             text-align: center;
             outline: none;
-            margin: 30px 0;
+            margin: 35px 0;
+            transition: 0.3s;
         }
+
+        input:focus { border-bottom-width: 4px; letter-spacing: 2px; }
 
         /* Section Styling */
         section {
@@ -74,79 +78,95 @@
             padding: 20px;
         }
 
-        /* Responsive Countdown */
+        /* Responsive Countdown Grid */
         .countdown-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
             width: 100%;
+            max-width: 600px;
+        }
+
+        @media (min-width: 768px) {
+            .countdown-wrap { grid-template-columns: repeat(4, 1fr); }
         }
 
         .unit {
             background: var(--glass);
-            padding: 1.5rem;
-            border-radius: 20px;
-            min-width: 80px; /* Slim for mobile */
-            flex: 1;
-            max-width: 150px;
+            padding: 2rem 1rem;
+            border-radius: 25px;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease;
         }
 
         .num { 
-            font-size: clamp(2rem, 8vw, 4rem); 
+            font-size: clamp(2.5rem, 10vw, 4.5rem); 
             font-weight: 700; 
             color: var(--accent); 
-            display: block; 
+            display: block;
+            line-height: 1;
+            margin-bottom: 5px;
         }
 
-        small { font-size: 0.6rem; letter-spacing: 2px; opacity: 0.5; }
+        small { font-size: 0.7rem; letter-spacing: 3px; opacity: 0.4; text-transform: uppercase; }
 
         /* Personalized Section */
         #personal-section {
-            background: radial-gradient(circle at center, #0a1f21 0%, #050505 100%);
+            background: radial-gradient(circle at 50% 50%, #0a1f21 0%, #050505 100%);
         }
 
         .reveal-text {
             font-family: 'Syncopate', sans-serif;
-            font-size: clamp(1.5rem, 6vw, 5rem);
+            font-size: clamp(1.8rem, 7vw, 5.5rem);
             text-transform: uppercase;
             text-align: center;
             opacity: 0;
-            line-height: 1.2;
+            line-height: 1.1;
+            transform: translateY(30px);
         }
 
         .name-highlight {
             color: var(--accent);
-            text-shadow: 0 0 30px var(--accent);
+            text-shadow: 0 0 40px rgba(0, 243, 255, 0.6);
             display: block;
+            margin-top: 10px;
         }
 
-        /* Utility */
-        .shaking { animation: shake 0.15s infinite; }
+        /* UI Utilities */
+        .btn-main {
+            background: var(--accent);
+            color: black;
+            border: none;
+            padding: 16px 45px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .btn-main:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent); }
+
+        .shaking { animation: shake 0.1s infinite; }
         @keyframes shake {
             0% { transform: translate(0,0); }
-            25% { transform: translate(4px, 4px); }
-            75% { transform: translate(-4px, -4px); }
+            50% { transform: translate(4px, 4px); }
             100% { transform: translate(0,0); }
         }
 
         #reset-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 0.7rem;
-            opacity: 0.3;
+            bottom: 25px;
+            left: 25px;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            opacity: 0.2;
             cursor: pointer;
             z-index: 10;
-        }
-
-        /* Mobile specific adjustments */
-        @media (max-width: 480px) {
-            .countdown-wrap { gap: 0.5rem; }
-            .unit { padding: 1rem 0.5rem; min-width: 70px; }
-            .input-card h2 { font-size: 1.2rem; }
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -154,21 +174,22 @@
 
     <div id="name-overlay">
         <div class="input-card">
-            <h2>WHO IS ENTERING 2026?</h2>
-            <input type="text" id="user-name" placeholder="Type name..." maxlength="15">
+            <h2 style="letter-spacing: 2px;">SYSTEM INITIALIZATION</h2>
+            <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">ENTER USERNAME FOR 2026 BROADCAST</p>
+            <input type="text" id="user-name" placeholder="YOUR NAME" maxlength="12">
             <br>
-            <button onclick="startExperience()" style="background: var(--accent); color: black; border:none; padding: 12px 40px; border-radius: 50px; cursor: pointer; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;">Begin</button>
+            <button class="btn-main" onclick="startExperience()">Connect</button>
         </div>
     </div>
 
     <section id="timer-section">
         <div class="countdown-wrap" id="timer-ui">
-            <div class="unit"><span class="num" id="d">00</span><small>DAYS</small></div>
-            <div class="unit"><span class="num" id="h">00</span><small>HRS</small></div>
-            <div class="unit"><span class="num" id="m">00</span><small>MINS</small></div>
-            <div class="unit"><span class="num" id="s">00</span><small>SECS</small></div>
+            <div class="unit"><span class="num" id="d">00</span><small>Days</small></div>
+            <div class="unit"><span class="num" id="h">00</span><small>Hrs</small></div>
+            <div class="unit"><span class="num" id="m">00</span><small>Min</small></div>
+            <div class="unit"><span class="num" id="s">00</span><small>Sec</small></div>
         </div>
-        <p style="margin-top: 30px; opacity: 0.3; font-size: 0.8rem; letter-spacing: 5px;">AWAITING 2026</p>
+        <p style="margin-top: 40px; opacity: 0.4; font-size: 0.7rem; letter-spacing: 6px; text-transform: uppercase;">Syncing with 2026 Universe...</p>
     </section>
 
     <section id="personal-section">
@@ -176,17 +197,17 @@
             HAPPY NEW YEAR<br>
             <span class="name-highlight" id="display-name">DEVELOPER</span>
         </div>
-        <p style="margin-top: 20px; opacity: 0; letter-spacing: 8px; text-align: center;" id="sub-msg">THE FUTURE IS YOURS TO CODE.</p>
+        <p style="margin-top: 30px; opacity: 0; letter-spacing: 10px; text-align: center; font-weight: 300;" id="sub-msg">ACCESS GRANTED TO THE FUTURE</p>
     </section>
 
-    <div id="reset-btn" onclick="resetApp()">[ Reset Name ]</div>
+    <div id="reset-btn" onclick="resetApp()">CLEAR_SESSION_DATA</div>
 
     <script>
-        // TARGET DATE: Jan 1, 2026
+        // TARGET: Jan 1, 2026
         const targetDate = new Date("January 1, 2026 00:00:00").getTime();
         let userName = "";
 
-        // On Load: Check LocalStorage
+        // On Load Logic
         window.onload = () => {
             const savedName = localStorage.getItem('ny2026_user');
             if (savedName) {
@@ -194,20 +215,55 @@
                 document.getElementById('display-name').innerText = userName.toUpperCase();
                 document.getElementById('name-overlay').style.display = 'none';
                 initTimer();
+                scheduleNotification(); // Schedule broadcast if already logged in
             }
         };
+        // Register Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+    .then(reg => console.log('Broadcast SW Registered'));
+}
 
-        function startExperience() {
-            const input = document.getElementById('user-name').value.trim();
-            userName = input || "GUEST";
-            localStorage.setItem('ny2026_user', userName);
-            document.getElementById('display-name').innerText = userName.toUpperCase();
+async function startExperience() {
+    const input = document.getElementById('user-name').value.trim();
+    userName = input || "EXPLORER";
+    localStorage.setItem('ny2026_user', userName);
+    
+    // 1. Request Notification Permission
+    const permission = await Notification.requestPermission();
+
+    // 2. "Broadcast" to the Service Worker
+    if (permission === 'granted' && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+            type: 'SCHEDULE_NY_NOTIFICATION',
+            targetTime: targetDate,
+            name: userName
+        });
+    }
+
+    // 3. UI Transition
+    gsap.to("#name-overlay", { opacity: 0, duration: 0.8, onComplete: () => {
+        document.getElementById('name-overlay').style.display = 'none';
+        initTimer();
+    }});
+}
+        // async function startExperience() {
+        //     const input = document.getElementById('user-name').value.trim();
+        //     userName = input || "EXPLORER";
+        //     localStorage.setItem('ny2026_user', userName);
+        //     document.getElementById('display-name').innerText = userName.toUpperCase();
             
-            gsap.to("#name-overlay", { opacity: 0, duration: 0.5, onComplete: () => {
-                document.getElementById('name-overlay').style.display = 'none';
-                initTimer();
-            }});
-        }
+        //     // REQUEST BROADCAST PERMISSION
+        //     if ("Notification" in window) {
+        //         await Notification.requestPermission();
+        //     }
+
+        //     gsap.to("#name-overlay", { opacity: 0, duration: 0.8, ease: "power2.out", onComplete: () => {
+        //         document.getElementById('name-overlay').style.display = 'none';
+        //         initTimer();
+        //         scheduleNotification();
+        //     }});
+        // }
 
         function initTimer() {
             const timerInterval = setInterval(() => {
@@ -225,27 +281,42 @@
                 document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
                 document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
 
-                // Last 10 seconds: Mobile-friendly shake
                 if (diff < 10000) document.getElementById('timer-ui').classList.add('shaking');
             }, 1000);
         }
 
-        function triggerMidnight() {
-            // 1. Confetti Burst
-            const count = 200, defaults = { origin: { y: 0.7 } };
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) }));
-            }
-            fire(0.25, { spread: 26, startVelocity: 55 });
-            fire(0.2, { spread: 60 });
-            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        function scheduleNotification() {
+            const now = new Date().getTime();
+            const delay = targetDate - now;
 
-            // 2. Cinematic Transition
+            if (delay > 0 && Notification.permission === "granted") {
+                setTimeout(() => {
+                    new Notification("2026 BROADCAST", {
+                        body: `Happy New Year, ${userName}! The future is here.`,
+                        icon: "https://cdn-icons-png.flaticon.com/512/3361/3361905.png"
+                    });
+                }, delay);
+            }
+        }
+
+        function triggerMidnight() {
+            // Vibrate phone
+            if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
+
+            // Confetti Cannon
+            const end = Date.now() + (10 * 1000);
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#00f3ff', '#ffffff'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#00f3ff', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+            // Transition
             const tl = gsap.timeline();
-            tl.to("#timer-ui", { scale: 0.8, opacity: 0, duration: 1 })
-              .to(window, { scrollTo: "#personal-section", duration: 2, ease: "power4.inOut" })
-              .to("#final-msg", { opacity: 1, y: -20, duration: 1.2, ease: "back.out" })
-              .to("#sub-msg", { opacity: 0.5, duration: 1 }, "-=0.5");
+            tl.to("#timer-ui", { scale: 0.5, opacity: 0, duration: 1, ease: "power4.in" })
+              .to(window, { scrollTo: "#personal-section", duration: 2.5, ease: "expo.inOut" })
+              .to("#final-msg", { opacity: 1, y: 0, duration: 1.5, ease: "back.out(1.2)" })
+              .to("#sub-msg", { opacity: 0.6, duration: 1 }, "-=0.5");
         }
 
         function resetApp() {
